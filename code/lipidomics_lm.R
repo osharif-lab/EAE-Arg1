@@ -110,6 +110,7 @@ write.xlsx2(results, paste0("lipidomics/de_",paste0(levs,collapse='_'),".xlsx"),
 ids<-which(res_healthy_eae_CM$adj.P.Val<0.05 & res_healthy_eae_CM$logFC>1)
 select_lips<-rownames(results)[ids]
 
+# Extended Data Figure 9a
 pdf(width=6,height=9,file=paste0('lipidomics/volcano_',paste0(levs,collapse='_'),'_colored.pdf'))
 v<-EnhancedVolcano(results,
                    lab = rownames(results),
@@ -158,6 +159,7 @@ write.xlsx2(results, paste0("lipidomics/de_",paste0(levs,collapse='_'),".xlsx"),
 ids<-which(res_healthy_eae_CM$adj.P.Val<0.05 & res_healthy_eae_CM$logFC>1 & res_argeae_eae_cells$adj.P.Val<0.05 & res_argeae_eae_cells$logFC<(-1) )
 select_lips<-rownames(results)[ids]
 
+# Figure 6m
 pdf(width=6,height=9,file=paste0('lipidomics/volcano_',paste0(levs,collapse='_'),'_colored_labels_sig_healthyvEAE.pdf'))
 v<-EnhancedVolcano(results,
                    lab = rownames(results),
@@ -219,6 +221,7 @@ write.xlsx2(log_lip_sum, paste0("lipidomics/Cells_sum_by_lipid_class_log.xlsx"),
 library(pheatmap)
 library(grid)
 
+# Extended Data Figure 11
 pdf("lipidomics/Heatmap_classSums_EAE_Cells.pdf", width=6,height=4)
 p<-pheatmap(log_lip_sum,
             color = rev(colorRampPalette(c("#B2182B", "#FDDBC7", "#2166AC"))(n = 256)),
