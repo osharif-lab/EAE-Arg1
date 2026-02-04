@@ -46,6 +46,28 @@ pdf("./plots/scRNAseq/Fig4A_scRNA_seq__all_Ly6i.pdf", 5, 5)
 FeaturePlot(rds.file, features = c("Ly6i"),cols = c("lightgrey", "maroon"), pt.size = 0.8, ncol = 1) 
 dev.off()
 
+#------------
+# EDIT by LM
+
+# separate plots by disease phase (here: "tissue")
+
+rds.file2 <- subset(x = rds.file, subset = tissue %in% c('B6 acute','B6 naïve','B6 Priming','B6 remitting')) # no 'B6 CFA' cells
+rds.file2$tissue <- factor(rds.file2$tissue,levels=c('B6 naïve','B6 Priming','B6 acute','B6 remitting'))
+
+# celltypes/clusters by phase
+pdf("./plots/scRNAseq/EDFig7D_scRNA_seq_clusters_by_phase.pdf", height=6, width=21)
+DimPlot(rds.file2, label.size = 4, pt.size = 0.4, repel = T, label = T, split.by = 'tissue')
+dev.off()
+
+# Arg1 expression by phase
+pdf("./plots/scRNAseq/EDFig7E_scRNA_seq_all_Arg1_by_phase.pdf", height=6, width=23)
+FeaturePlot(rds.file2, features = c("Arg1"), cols = c("lightgrey", "maroon"), 
+            pt.size = 0.8, ncol = 1, split.by = 'tissue') 
+dev.off()
+# END OF EDIT
+#-----------
+
+
 
 #### ------------------------------------------
 ### only myeloid clusters
@@ -64,9 +86,31 @@ pdf("./plots/scRNAseq/Fig4C_dotplot_Arg1_Nos2_Fabp5_Spp1_Ccl6.pdf")
 DotPlot(rds.file.subset2, features=c("Arg1","Nos2", "Fabp5", "Spp1", "Ccl6"), dot.scale=10, idents=c('2', '0', '1', '3', '4', '18'), cols="RdBu")
 dev.off()
 
+#---------
+# EDIT by LM
+
+# order clusters
+rds.file.subset2@active.ident <- factor(rds.file.subset2@active.ident,
+                                        levels=c("0","1","2","3","4","18"))
+
+# expression in myeloid clusters
+gene_list <- c("Arg1","Ly6c1","P2ry12","Hexb","Lyz2","Ly6c2","Ly6i","H2-Aa",'Mrc1', 'Cd163')
+pdf("./plots/scRNAseq/Fig7C_dotplot_gene_list_myeloid.pdf")
+DotPlot(rds.file.subset2, features = gene_list, dot.scale=10, idents=c("0","1","2","3","4","18"), cols="RdBu")
+dev.off()
+
+# expression in all cell types
+pdf("./plots/scRNAseq/Fig7B_dotplot_Arg1_Nos2_all_clusters.pdf", width=4)
+DotPlot(rds.file, features = c("Arg1","Nos2"), dot.scale=10, cols="RdBu")
+dev.off()
+
+# END OF EDIT
+#------
 
 
-#### ---------------------------------
+
+
+####---------------------------------
 # subclustering
 
 arg_subset <- subset(rds.file, idents = c("2"))
